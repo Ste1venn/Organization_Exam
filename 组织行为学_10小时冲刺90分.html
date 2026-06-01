@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>组织行为学 · 10小时冲刺90分</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+  :root {
+    --ink: #1a1a2e;
+    --red: #e63946;
+    --gold: #f4a261;
+    --teal: #2a9d8f;
+    --blue: #457b9d;
+    --light: #f1faee;
+    --mid: #a8dadc;
+    --paper: #fefae0;
+    --gray: #6c757d;
+    --success: #2d6a4f;
+    --warn: #e9c46a;
+    --card-bg: #ffffff;
+    --border: #dee2e6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--ink);
+    color: var(--light);
+    min-height: 100vh;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 40px 20px 30px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 3px solid var(--red);
+  }
+  .hero::before {
+    content: '组织行为学';
+    position: absolute;
+    font-size: 180px;
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 900;
+    color: rgba(255,255,255,0.03);
+    top: -20px; left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .hero h1 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900;
+    letter-spacing: 4px;
+    color: #fff;
+    position: relative;
+  }
+  .hero h1 span { color: var(--red); }
+  .hero p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--mid);
+    letter-spacing: 2px;
+  }
+  .badge-row {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px;
+  }
+  .badge {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--gold);
+  }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(26,26,46,0.97);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; gap: 0; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    background: none; border: none; color: #aaa;
+    padding: 14px 20px; cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 13px; white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .nav-btn:hover { color: var(--mid); }
+  .nav-btn.active {
+    color: var(--red);
+    border-bottom-color: var(--red);
+    background: rgba(230,57,70,0.08);
+  }
+  .nav-btn .num {
+    background: var(--red);
+    color: #fff;
+    border-radius: 10px;
+    padding: 1px 6px;
+    font-size: 10px;
+    margin-left: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ===== SECTIONS ===== */
+  .section { display: none; padding: 24px 16px; max-width: 960px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  /* ===== PROGRESS BAR ===== */
+  .progress-bar-wrapper {
+    background: rgba(255,255,255,0.08);
+    border-radius: 20px;
+    height: 8px;
+    margin: 20px 0;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--blue));
+    border-radius: 20px;
+    transition: width 0.5s ease;
+  }
+
+  /* ===== CHAPTER LIST ===== */
+  .chapter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .chapter-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .chapter-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4px;
+  }
+  .chapter-card.importance-high::before { background: var(--red); }
+  .chapter-card.importance-mid::before { background: var(--gold); }
+  .chapter-card.importance-low::before { background: var(--teal); }
+  .chapter-card:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+  .chapter-card h3 { font-size: 15px; color: #fff; margin-bottom: 6px; }
+  .chapter-card .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .tag {
+    font-size: 11px; padding: 2px 8px; border-radius: 10px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .tag.hot { background: rgba(230,57,70,0.2); color: var(--red); border: 1px solid rgba(230,57,70,0.3); }
+  .tag.normal { background: rgba(168,218,220,0.15); color: var(--mid); border: 1px solid rgba(168,218,220,0.2); }
+  .tag.theory { background: rgba(69,123,157,0.2); color: #90caf9; border: 1px solid rgba(69,123,157,0.3); }
+  .chapter-card .star { color: var(--gold); font-size: 12px; }
+
+  /* ===== THEORY CARDS ===== */
+  .theory-section-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 20px; color: var(--gold);
+    margin: 28px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(244,162,97,0.3);
+  }
+  .theory-section-title span {
+    font-size: 12px; color: var(--gray);
+    font-family: 'JetBrains Mono', monospace;
+    margin-left: 10px;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 14px 16px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background 0.2s;
+  }
+  .card-header:hover { background: rgba(255,255,255,0.05); }
+  .card-title {
+    font-size: 15px; font-weight: 700; color: #fff;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-title .icon { font-size: 18px; }
+  .card-subtitle { font-size: 11px; color: var(--gray); margin-top: 2px; }
+  .card-arrow { color: var(--gray); transition: transform 0.3s; font-size: 12px; }
+  .card.open .card-arrow { transform: rotate(180deg); }
+  .card-body {
+    display: none; padding: 0 16px 16px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+  .card.open .card-body { display: block; }
+
+  .key-point {
+    background: rgba(230,57,70,0.1);
+    border-left: 3px solid var(--red);
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    margin: 10px 0;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .key-point strong { color: var(--red); }
+
+  .formula-box {
+    background: rgba(42,157,143,0.1);
+    border: 1px solid rgba(42,157,143,0.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--mid);
+    text-align: center;
+  }
+
+  .compare-table {
+    width: 100%; border-collapse: collapse; margin: 10px 0;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: rgba(255,255,255,0.1);
+    padding: 8px 10px; text-align: left;
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .compare-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    color: #ccc;
+    vertical-align: top;
+  }
+  .compare-table tr:hover td { background: rgba(255,255,255,0.03); }
+
+  .numbered-list { padding-left: 0; list-style: none; margin: 10px 0; }
+  .numbered-list li {
+    padding: 6px 0 6px 28px;
+    position: relative;
+    font-size: 14px;
+    color: #ccc;
+    line-height: 1.7;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .numbered-list li:last-child { border: none; }
+  .numbered-list li::before {
+    content: counter(item);
+    counter-increment: item;
+    position: absolute; left: 0;
+    background: var(--blue);
+    color: #fff;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-family: 'JetBrains Mono', monospace;
+    top: 8px;
+  }
+  .numbered-list { counter-reset: item; }
+
+  .highlight { color: var(--gold); font-weight: 700; }
+  .red { color: var(--red); font-weight: 700; }
+  .teal { color: var(--teal); }
+
+  /* ===== MEMORY AIDS ===== */
+  .memory-card {
+    background: linear-gradient(135deg, rgba(244,162,97,0.15), rgba(42,157,143,0.1));
+    border: 1px solid rgba(244,162,97,0.3);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+  }
+  .memory-card h4 { color: var(--gold); font-size: 14px; margin-bottom: 8px; }
+  .memory-card p { font-size: 14px; color: #ccc; line-height: 1.8; }
+  .memory-acronym {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    color: var(--mid);
+    letter-spacing: 6px;
+    text-align: center;
+    margin: 8px 0;
+  }
+
+  /* ===== QUIZ ===== */
+  .quiz-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 14px;
+    text-align: center; border: 1px solid rgba(255,255,255,0.1);
+  }
+  .stat-box .num { font-size: 28px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+  .stat-box .label { font-size: 11px; color: var(--gray); margin-top: 4px; }
+  .stat-box.correct .num { color: var(--teal); }
+  .stat-box.wrong .num { color: var(--red); }
+  .stat-box.total .num { color: var(--gold); }
+  .stat-box.score .num { color: var(--mid); }
+
+  .quiz-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px; padding: 20px;
+    margin-bottom: 16px;
+    transition: all 0.3s;
+  }
+  .quiz-card.answered-correct { border-color: var(--teal); background: rgba(42,157,143,0.08); }
+  .quiz-card.answered-wrong { border-color: var(--red); background: rgba(230,57,70,0.08); }
+
+  .quiz-q {
+    font-size: 15px; color: #fff; line-height: 1.7;
+    margin-bottom: 14px; font-weight: 500;
+  }
+  .quiz-q .q-num {
+    background: var(--blue);
+    color: #fff; padding: 2px 8px; border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; margin-right: 8px;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; padding: 10px 14px;
+    color: #ccc; cursor: pointer; text-align: left;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 14px; line-height: 1.5;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    background: rgba(69,123,157,0.2);
+    border-color: var(--blue);
+    color: #fff;
+  }
+  .option-btn:disabled { cursor: default; }
+  .option-btn.correct { background: rgba(42,157,143,0.2); border-color: var(--teal); color: #fff; }
+  .option-btn.wrong { background: rgba(230,57,70,0.2); border-color: var(--red); color: #fff; }
+  .option-btn.revealed { background: rgba(42,157,143,0.1); border-color: rgba(42,157,143,0.5); color: var(--mid); }
+
+  .explain-box {
+    display: none; margin-top: 12px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px; padding: 12px 14px;
+    font-size: 13px; color: #aaa; line-height: 1.8;
+    border-left: 3px solid var(--gold);
+  }
+  .explain-box.show { display: block; }
+  .explain-box strong { color: var(--gold); }
+
+  .quiz-controls {
+    display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .btn {
+    padding: 10px 20px; border-radius: 8px; border: none;
+    cursor: pointer; font-family: 'Noto Sans SC', sans-serif;
+    font-size: 14px; font-weight: 600; transition: all 0.2s;
+  }
+  .btn-primary { background: var(--red); color: #fff; }
+  .btn-primary:hover { background: #c62828; }
+  .btn-secondary { background: rgba(255,255,255,0.1); color: #ccc; border: 1px solid rgba(255,255,255,0.2); }
+  .btn-secondary:hover { background: rgba(255,255,255,0.15); color: #fff; }
+  .btn-teal { background: var(--teal); color: #fff; }
+  .btn-teal:hover { background: #1e7c71; }
+
+  /* ===== FLASHCARDS ===== */
+  .flashcard-container {
+    perspective: 1000px;
+    width: 100%; max-width: 600px; height: 260px;
+    margin: 20px auto; cursor: pointer;
+  }
+  .flashcard-inner {
+    width: 100%; height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+  }
+  .flashcard-container.flipped .flashcard-inner {
+    transform: rotateY(180deg);
+  }
+  .flashcard-front, .flashcard-back {
+    position: absolute; width: 100%; height: 100%;
+    backface-visibility: hidden;
+    border-radius: 16px; padding: 30px;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+  }
+  .flashcard-front {
+    background: linear-gradient(135deg, #16213e, #0f3460);
+    border: 2px solid rgba(69,123,157,0.4);
+  }
+  .flashcard-back {
+    background: linear-gradient(135deg, #1a3a2a, #0d2a1e);
+    border: 2px solid rgba(42,157,143,0.4);
+    transform: rotateY(180deg);
+  }
+  .flashcard-front .question {
+    font-size: 18px; font-weight: 700; color: #fff;
+    line-height: 1.6;
+  }
+  .flashcard-front .hint {
+    margin-top: 12px; font-size: 12px; color: var(--gray);
+  }
+  .flashcard-back .answer {
+    font-size: 15px; color: #fff; line-height: 1.8;
+  }
+  .flashcard-back .keyword {
+    font-size: 24px; font-weight: 900;
+    font-family: 'Noto Serif SC', serif;
+    color: var(--teal); margin-bottom: 10px;
+  }
+
+  .fc-nav {
+    display: flex; gap: 12px; justify-content: center;
+    align-items: center; margin-top: 16px;
+  }
+  .fc-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px; color: var(--gray);
+    min-width: 80px; text-align: center;
+  }
+
+  /* ===== EXAM TIPS ===== */
+  .tip-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px; margin-top: 16px;
+  }
+  .tip-card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px; padding: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .tip-card h4 {
+    color: var(--gold); font-size: 14px;
+    margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+  }
+  .tip-card ul { list-style: none; padding: 0; }
+  .tip-card ul li {
+    font-size: 13px; color: #bbb; padding: 4px 0 4px 16px;
+    position: relative; line-height: 1.6;
+  }
+  .tip-card ul li::before {
+    content: '▸'; position: absolute; left: 0;
+    color: var(--teal);
+  }
+
+  .timeline {
+    position: relative; padding-left: 24px; margin: 16px 0;
+  }
+  .timeline::before {
+    content: ''; position: absolute; left: 8px; top: 0; bottom: 0;
+    width: 2px; background: rgba(69,123,157,0.4);
+  }
+  .timeline-item {
+    position: relative; margin-bottom: 16px;
+  }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -20px; top: 6px;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--blue); border: 2px solid var(--mid);
+  }
+  .timeline-item h4 { font-size: 14px; color: var(--gold); }
+  .timeline-item p { font-size: 13px; color: #aaa; margin-top: 3px; line-height: 1.6; }
+
+  /* ===== SCROLL TO TOP ===== */
+  .back-to-top {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--red); color: #fff;
+    border: none; border-radius: 50%; width: 44px; height: 44px;
+    cursor: pointer; font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px rgba(230,57,70,0.4);
+    transition: all 0.2s; z-index: 200;
+  }
+  .back-to-top:hover { transform: scale(1.1); }
+
+  /* ===== SEARCH ===== */
+  .search-bar {
+    width: 100%; padding: 12px 16px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; color: #fff;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 14px; margin-bottom: 16px;
+    outline: none; transition: border 0.2s;
+  }
+  .search-bar:focus { border-color: var(--blue); }
+  .search-bar::placeholder { color: var(--gray); }
+
+  /* ===== MUST KNOW ===== */
+  .must-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  @media (max-width: 600px) { .must-grid { grid-template-columns: 1fr; } }
+  .must-item {
+    background: rgba(230,57,70,0.08);
+    border: 1px solid rgba(230,57,70,0.2);
+    border-radius: 10px; padding: 14px;
+  }
+  .must-item h4 { color: var(--red); font-size: 13px; margin-bottom: 6px; }
+  .must-item p { font-size: 13px; color: #bbb; line-height: 1.7; }
+
+  @media (max-width: 600px) {
+    .quiz-stats { grid-template-columns: repeat(2, 1fr); }
+    .chapter-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+
+  .divider { height: 1px; background: rgba(255,255,255,0.07); margin: 20px 0; }
+
+  .alert {
+    padding: 10px 14px; border-radius: 8px; margin: 12px 0;
+    font-size: 13px; line-height: 1.7;
+  }
+  .alert-red { background: rgba(230,57,70,0.12); border-left: 3px solid var(--red); color: #ffcdd2; }
+  .alert-gold { background: rgba(244,162,97,0.12); border-left: 3px solid var(--gold); color: #ffe0b2; }
+  .alert-teal { background: rgba(42,157,143,0.12); border-left: 3px solid var(--teal); color: #b2dfdb; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>组织行为学 · <span>10小时冲刺</span> · 90分</h1>
+  <p>基于罗宾斯第14版 · 完整考点 · 题库测验 · 记忆卡片</p>
+  <div class="badge-row">
+    <span class="badge">18章核心理论</span>
+    <span class="badge">60+测试题</span>
+    <span class="badge">30张记忆卡</span>
+    <span class="badge">必考题清单</span>
+    <span class="badge">答题技巧</span>
+  </div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="showSection('overview')">📚 章节总览</button>
+  <button class="nav-btn" onclick="showSection('theory')">🧠 核心理论</button>
+  <button class="nav-btn" onclick="showSection('must')">🔥 必考重点</button>
+  <button class="nav-btn" onclick="showSection('flashcard')">🃏 记忆卡片</button>
+  <button class="nav-btn" onclick="showSection('quiz')">✏️ 模拟测试 <span class="num">60题</span></button>
+  <button class="nav-btn" onclick="showSection('tips')">💡 答题攻略</button>
+</nav>
+
+<!-- ======== OVERVIEW ======== -->
+<div id="overview" class="section active">
+  <div style="margin-bottom:16px">
+    <div style="font-size:13px;color:var(--gray);margin-bottom:6px">学习进度</div>
+    <div class="progress-bar-wrapper">
+      <div class="progress-bar" id="progressBar" style="width:0%"></div>
+    </div>
+    <div style="font-size:12px;color:var(--gray);text-align:right" id="progressText">0 / 6 模块已完成</div>
+  </div>
+
+  <div class="alert alert-red">⚠️ 重要性标注：<strong style="color:var(--red)">红色边框 = 必考高频</strong>，金色 = 重要，绿色 = 一般了解</div>
+
+  <div style="font-family:'Noto Serif SC',serif;font-size:22px;color:var(--gold);margin:16px 0 12px">章节重要性概览</div>
+  <div class="chapter-grid">
+    <div class="chapter-card importance-high" onclick="showSection('theory')">
+      <div class="chapter-card__num" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.01</div>
+      <h3>什么是组织行为学</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">管理者职能、角色、技能；三分析水平</p>
+      <div class="tags">
+        <span class="tag hot">★必考</span><span class="tag theory">概念题</span>
+      </div>
+    </div>
+    <div class="chapter-card importance-mid">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.02</div>
+      <h3>组织的多元化</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">人口特征、多元化管理、能力差异</p>
+      <div class="tags"><span class="tag normal">了解</span></div>
+    </div>
+    <div class="chapter-card importance-high">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.03</div>
+      <h3>态度与工作满意度</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">认知失调、态度三要素、满意度因素</p>
+      <div class="tags"><span class="tag hot">★必考</span><span class="tag theory">简答题</span></div>
+    </div>
+    <div class="chapter-card importance-high">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.04</div>
+      <h3>情绪与心境</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">情绪劳动、情绪智力、心境对决策的影响</p>
+      <div class="tags"><span class="tag hot">★高频</span></div>
+    </div>
+    <div class="chapter-card importance-high">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.05</div>
+      <h3>人格与价值观</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">大五人格、MBTI、霍夫斯泰德文化维度</p>
+      <div class="tags"><span class="tag hot">★必考</span><span class="tag theory">论述题</span></div>
+    </div>
+    <div class="chapter-card importance-high">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.06</div>
+      <h3>知觉与个体决策</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">归因理论、知觉偏见、决策模型</p>
+      <div class="tags"><span class="tag hot">★必考</span><span class="tag theory">案例分析</span></div>
+    </div>
+    <div class="chapter-card importance-high">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.07</div>
+      <h3>基本动机概念</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">需求层次、X/Y理论、双因素、期望理论</p>
+      <div class="tags"><span class="tag hot">★最重要</span><span class="tag theory">论述题</span></div>
+    </div>
+    <div class="chapter-card importance-mid">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.08</div>
+      <h3>动机：从概念到应用</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">工作特征模型、弹性工作制</p>
+      <div class="tags"><span class="tag normal">应用题</span></div>
+    </div>
+    <div class="chapter-card importance-high">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.09</div>
+      <h3>群体行为的基础</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">群体规范、地位、社会惰化、凝聚力</p>
+      <div class="tags"><span class="tag hot">★必考</span></div>
+    </div>
+    <div class="chapter-card importance-mid">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.10</div>
+      <h3>理解工作团队</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">团队 vs 群体、有效团队因素</p>
+      <div class="tags"><span class="tag normal">简答</span></div>
+    </div>
+    <div class="chapter-card importance-mid">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.11</div>
+      <h3>沟通</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">沟通过程8要素、渠道丰富度</p>
+      <div class="tags"><span class="tag hot">★简答</span></div>
+    </div>
+    <div class="chapter-card importance-high">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.12</div>
+      <h3>领导</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">特质/行为理论、魅力领导、变革型领导</p>
+      <div class="tags"><span class="tag hot">★必考</span><span class="tag theory">论述题</span></div>
+    </div>
+    <div class="chapter-card importance-mid">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.13</div>
+      <h3>权力与政治</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">印象管理、政治行为原因</p>
+      <div class="tags"><span class="tag normal">了解</span></div>
+    </div>
+    <div class="chapter-card importance-mid">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.14</div>
+      <h3>冲突与谈判</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">冲突过程、分配/综合谈判</p>
+      <div class="tags"><span class="tag hot">★简答</span></div>
+    </div>
+    <div class="chapter-card importance-mid">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.15</div>
+      <h3>组织结构的基础</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">六要素、机械vs有机结构</p>
+      <div class="tags"><span class="tag normal">简答</span></div>
+    </div>
+    <div class="chapter-card importance-high">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.16</div>
+      <h3>组织文化</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">7特征、文化传递4方式、灵性文化</p>
+      <div class="tags"><span class="tag hot">★必考</span></div>
+    </div>
+    <div class="chapter-card importance-mid">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.17</div>
+      <h3>人力资源政策与实践</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">绩效评估、工作生活冲突</p>
+      <div class="tags"><span class="tag normal">应用</span></div>
+    </div>
+    <div class="chapter-card importance-high">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray)">CH.18</div>
+      <h3>组织变革与压力管理</h3>
+      <p style="font-size:12px;color:#aaa;margin-top:4px">变革力量、变革阻力、卢因三步骤</p>
+      <div class="tags"><span class="tag hot">★论述题</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== THEORY ======== -->
+<div id="theory" class="section">
+  <input class="search-bar" type="text" placeholder="🔍 搜索理论关键词..." oninput="filterCards(this.value)">
+
+  <!-- CH01 -->
+  <div class="theory-section-title">第一章 什么是组织行为学 <span>★必考</span></div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title"><span class="icon">🏗️</span>管理者三维框架（职能/角色/技能）</div>
+        <div class="card-subtitle">OB核心定义 · 极高频考点</div>
+      </div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <table class="compare-table">
+        <tr><th>维度</th><th>内容</th></tr>
+        <tr><td><span class="highlight">职能</span></td><td>计划 → 组织 → 领导 → 控制</td></tr>
+        <tr><td><span class="highlight">角色</span></td><td>人际角色（代表/领导/联络）/ 信息角色（监督/传播/发言）/ 决策角色（企业家/冲突处理/资源分配/谈判）</td></tr>
+        <tr><td><span class="highlight">技能</span></td><td>技术技能 / 人际技能 / 概念技能</td></tr>
+      </table>
+      <div class="key-point">
+        <strong>OB定义：</strong>探讨个体、群体以及结构对组织内部行为的影响，目的是<strong>应用这些知识改善组织绩效</strong>。
+      </div>
+      <div class="key-point">
+        <strong>三个分析水平：</strong>个体 → 群体 → 组织系统（像砖块一样，每一层建立在前一层之上）
+      </div>
+      <div class="memory-card">
+        <h4>🧠 速记口诀</h4>
+        <div class="memory-acronym">计 组 领 控</div>
+        <p>管理者职能 = 计划·组织·领导·控制<br>三角色 = 人际·信息·决策<br>三技能 = 技术·人际·概念（基层多技术，高层多概念）</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CH03 -->
+  <div class="theory-section-title">第三章 态度与工作满意度 <span>★必考</span></div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title"><span class="icon">💭</span>态度三要素 + 认知失调</div>
+        <div class="card-subtitle">简答题高频 · 认知失调是重点</div>
+      </div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="key-point">
+        <strong>态度三要素：</strong><br>
+        ① <span class="red">认知成分</span>——对态度对象的信念和认识（基础）<br>
+        ② <span class="red">情感成分</span>——情绪情感体验（核心）<br>
+        ③ <span class="red">行为意向</span>——行为准备状态
+      </div>
+      <div class="key-point">
+        <strong>认知失调（费斯汀格）：</strong>两个或更多态度之间、或行为与态度之间的<strong>任何不一致</strong>。<br>
+        减少失调的方法：①改变认知元素 ②降低重要性 ③增加和谐元素<br>
+        失调程度取决于：要素重要程度 · 可控程度 · 受益程度
+      </div>
+      <div class="alert alert-gold">
+        ⚠️ 注意：<strong>态度并不实在决定行为</strong>！行为有时会决定态度。调节变量包括：态度重要性、具体性、可提取性、社会压力、直接经验。
+      </div>
+      <div class="key-point">
+        <strong>工作满意度影响因素：</strong>工作本身 · 薪酬 · 晋升机会 · 主管 · 同事 · 人格<br>
+        <strong>关键结论：</strong>贫穷时薪酬更重要；富裕时工作本身更重要
+      </div>
+    </div>
+  </div>
+
+  <!-- CH05 -->
+  <div class="theory-section-title">第五章 人格与价值观 <span>★必考论述</span></div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title"><span class="icon">🎭</span>大五人格模型（必背）</div>
+        <div class="card-subtitle">OCEAN模型 · 责任心预测绩效最强</div>
+      </div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <table class="compare-table">
+        <tr><th>维度</th><th>英文</th><th>高分特征</th><th>低分特征</th></tr>
+        <tr><td><span class="highlight">外倾性</span></td><td>Extraversion</td><td>外向、善社交、自信</td><td>内向、害羞、安静</td></tr>
+        <tr><td><span class="highlight">随和性</span></td><td>Agreeableness</td><td>合作、热情、信赖他人</td><td>冷淡、敌对</td></tr>
+        <tr><td><span class="red">责任心</span></td><td>Conscientiousness</td><td>负责、有条理、持之以恒</td><td>精力分散、不可信</td></tr>
+        <tr><td><span class="highlight">情绪稳定性</span></td><td>Neuroticism</td><td>平和、自信、安全</td><td>紧张、焦虑、缺乏安全感</td></tr>
+        <tr><td><span class="highlight">经验开放性</span></td><td>Openness</td><td>创造性、好奇心、艺术敏感</td><td>保守、固执</td></tr>
+      </table>
+      <div class="key-point">
+        <strong>核心结论：责任心在预测工作绩效方面最有价值</strong>——适用于大多数组织中的大多数工作。
+      </div>
+      <div class="memory-card">
+        <h4>🧠 OCEAN速记</h4>
+        <div class="memory-acronym">O C E A N</div>
+        <p><strong>O</strong>penness 开放 · <strong>C</strong>onscientiousness 责任 · <strong>E</strong>xtraversion 外倾 · <strong>A</strong>greeableness 随和 · <strong>N</strong>euroticism 情绪稳定</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title"><span class="icon">🌍</span>霍夫斯泰德五维文化模型</div>
+        <div class="card-subtitle">价值观跨文化差异 · 常考简答</div>
+      </div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <ul class="numbered-list">
+        <li><strong>权力距离</strong>——对权力不平等的接受程度（高=等级分明）</li>
+        <li><strong>不确定性规避</strong>——对模糊情境的容忍度（高=规则多）</li>
+        <li><strong>个人主义 vs 集体主义</strong>——自我利益 vs 群体利益</li>
+        <li><strong>男性主义 vs 女性主义</strong>——竞争成就 vs 关系质量</li>
+        <li><strong>长期取向 vs 短期取向</strong>——节俭坚持 vs 传统尊重</li>
+      </ul>
+      <div class="alert alert-teal">对管理的影响：权力距离影响领导方式；不确定性规避影响组织结构正规化程度</div>
+    </div>
+  </div>
+
+  <!-- CH06 -->
+  <div class="theory-section-title">第六章 知觉与个体决策 <span>★必考</span></div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title"><span class="icon">🔍</span>归因理论（凯利）</div>
+        <div class="card-subtitle">三要素 · 归因偏差 · 常考简答</div>
+      </div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="key-point">
+        <strong>归因三要素：</strong><br>
+        ① <span class="red">区别性</span>——个体在不同情境下是否表现出不同行为<br>
+        ② <span class="red">一致性</span>——每个人面对相似情境是否有相同反应<br>
+        ③ <span class="red">一贯性</span>——不论时间变化，个体是否表现相同行为
+      </div>
+      <table class="compare-table">
+        <tr><th>归因偏差</th><th>内容</th></tr>
+        <tr><td><span class="red">基本归因误差</span></td><td>高估内因（个人），低估外因（情境）</td></tr>
+        <tr><td><span class="highlight">自我服务偏差</span></td><td>成功归内因，失败归外因；对他人则反之</td></tr>
+      </table>
+      <div class="key-point">
+        <strong>判断他人的捷径：</strong>选择性知觉 · 晕轮效应 · 对比效应 · 投射作用 · 刻板印象
+      </div>
+      <div class="key-point">
+        <strong>常见决策偏见：</strong>过度自信 · 锚定偏见 · 验证偏见 · 易获性偏见<br>
+        <strong>常见决策错误：</strong>承诺升级 · 随机错误 · 风险厌恶 · 后视偏见
+      </div>
+    </div>
+  </div>
+
+  <!-- CH07 -->
+  <div class="theory-section-title">第七章 基本动机概念 <span>★最重要章节</span></div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title"><span class="icon">🏔️</span>马斯洛需求层次理论</div>
+        <div class="card-subtitle">早期激励理论 · 实证支持较弱</div>
+      </div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <div style="display:flex;flex-direction:column;gap:6px;margin:10px 0">
+        <div style="background:rgba(230,57,70,0.2);padding:8px 16px;border-radius:6px;text-align:center;font-weight:700;color:var(--red)">⑤ 自我实现需求（最高层）</div>
+        <div style="background:rgba(244,162,97,0.2);padding:8px 30px;border-radius:6px;text-align:center;color:var(--gold)">④ 尊重需求</div>
+        <div style="background:rgba(42,157,143,0.2);padding:8px 44px;border-radius:6px;text-align:center;color:var(--teal)">③ 社交需求（爱与归属）</div>
+        <div style="background:rgba(69,123,157,0.2);padding:8px 60px;border-radius:6px;text-align:center;color:var(--mid)">② 安全需求</div>
+        <div style="background:rgba(168,218,220,0.2);padding:8px 76px;border-radius:6px;text-align:center;color:#ccc">① 生理需求（基础层）</div>
+      </div>
+      <div class="alert alert-red">⚠️ 结论：几乎没有证据证明需求结构是像马斯洛提出的那样组织起来的，缺乏实证支持！</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title"><span class="icon">⚖️</span>赫兹伯格双因素理论</div>
+        <div class="card-subtitle">激励因素 vs 保健因素 · 必须区分清楚</div>
+      </div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <table class="compare-table">
+        <tr><th>类型</th><th>内容</th><th>作用</th></tr>
+        <tr>
+          <td><span class="red">激励因素</span>（内在）</td>
+          <td>成就感、认可、工作本身、责任、成长</td>
+          <td>有→满意；无→没有满意（不等于不满意）</td>
+        </tr>
+        <tr>
+          <td><span class="highlight">保健因素</span>（外在）</td>
+          <td>公司政策、监督、薪酬、人际关系、工作条件</td>
+          <td>有→消除不满；无→不满意</td>
+        </tr>
+      </table>
+      <div class="formula-box">满意的对立面 ≠ 不满意<br>满意 ←[激励因素]→ 没有满意<br>没有不满意 ←[保健因素]→ 不满意</div>
+      <div class="alert alert-red">⚠️ 局限：缺乏有力实证支持，但依然流传甚广。不能说满意就必然提高生产率。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title"><span class="icon">🎯</span>期望理论（弗鲁姆）</div>
+        <div class="card-subtitle">过程型激励理论 · 公式必会</div>
+      </div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="formula-box">M（动机）= V（效价）× E（期望值）</div>
+      <div class="key-point">
+        <strong>三种关系：</strong><br>
+        ① <span class="red">期望</span>：努力 → 绩效（我努力能否产生好结果？）<br>
+        ② <span class="highlight">工具性</span>：绩效 → 奖励（好绩效能否得到奖励？）<br>
+        ③ <span class="teal">效价</span>：奖励 → 个人目标（奖励对我有价值吗？）
+      </div>
+      <div class="alert alert-teal">管理应用：①按需设置奖励 ②提高完成目标的信心 ③建立绩效与报酬挂钩制度</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title"><span class="icon">🆚</span>X理论 vs Y理论（麦格雷戈）</div>
+        <div class="card-subtitle">人性假设 · 常考对比题</div>
+      </div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <table class="compare-table">
+        <tr><th>维度</th><th>X理论（消极）</th><th>Y理论（积极）</th></tr>
+        <tr><td>人性假设</td><td>人天生懒惰，逃避工作</td><td>工作是人的本能，天生喜欢</td></tr>
+        <tr><td>责任感</td><td>没有抱负，怕负责任</td><td>愿意承担责任，甚至追求责任</td></tr>
+        <tr><td>管理方式</td><td>严密控制、惩罚为主</td><td>授权参与、自我管理</td></tr>
+        <tr><td>激励手段</td><td>金钱奖励为主</td><td>内在满足、成就感</td></tr>
+      </table>
+      <div class="alert alert-red">⚠️ 两种理论均缺乏实证支持，无法证明哪类假设有效度。</div>
+    </div>
+  </div>
+
+  <!-- CH09 -->
+  <div class="theory-section-title">第九章 群体行为的基础 <span>★必考</span></div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title"><span class="icon">👥</span>群体核心概念大全</div>
+        <div class="card-subtitle">规范·地位·社会惰化·凝聚力</div>
+      </div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="key-point">
+        <strong>群体定义：</strong>为实现特定目标而组合到一起，并形成互动和相互依赖关系的两个或更多个体。
+      </div>
+      <div class="key-point">
+        <strong>群体属性：</strong>角色 · 规范 · 地位 · 规模 · 内聚力
+      </div>
+      <div class="key-point">
+        <strong>群体规范：</strong>成员共同接受的行为标准。作用：标准功能 · 导向功能 · 评价功能 · 动力功能
+      </div>
+      <div class="key-point">
+        <strong>社会惰化：</strong>个体在群体中工作不如单独工作努力的倾向。<br>
+        原因：①群体责任扩散 ②个人贡献不可识别<br>
+        克服：使个人贡献可识别 · 绩效评估中评价个人贡献
+      </div>
+      <div class="key-point">
+        <strong>群体发展五阶段：</strong>形成 → 震荡 → 规范化 → 执行 → 解体
+      </div>
+    </div>
+  </div>
+
+  <!-- CH12 -->
+  <div class="theory-section-title">第十二章 领导 <span>★必考论述</span></div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title"><span class="icon">👑</span>领导理论三阶段</div>
+        <div class="card-subtitle">特质→行为→权变·变革型vs魅力型</div>
+      </div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <table class="compare-table">
+        <tr><th>理论</th><th>核心观点</th><th>评价</th></tr>
+        <tr><td><span class="highlight">特质理论</span></td><td>领导力来自个人品质（智力、自信、诚信等）</td><td>能预测领导者，但不能区分有效/无效领导</td></tr>
+        <tr><td><span class="highlight">行为理论</span></td><td>领导行为分关怀维度和结构维度</td><td>高关怀→下属满意度更高、更尊重领导者</td></tr>
+        <tr><td><span class="highlight">权变理论</span></td><td>最优领导风格取决于情境</td><td>费德勒、赫塞-布兰查德</td></tr>
+      </table>
+      <div class="key-point">
+        <strong>变革型领导 vs 魅力型领导：</strong><br>
+        魅力型：可能只是让下属接受自己的世界观<br>
+        变革型：还培养下属<span class="red">质疑领导者本人价值观</span>的能力（更高级）<br><br>
+        <strong>变革型领导的全球普适因素：</strong>愿景 · 远见 · 提供鼓励 · 值得信任 · 充满活力 · 积极主动
+      </div>
+    </div>
+  </div>
+
+  <!-- CH14 -->
+  <div class="theory-section-title">第十四章 冲突与谈判 <span>★简答</span></div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title"><span class="icon">🤝</span>分配谈判 vs 综合谈判</div>
+        <div class="card-subtitle">必须能准确对比区分</div>
+      </div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <table class="compare-table">
+        <tr><th>维度</th><th>分配谈判（零和）</th><th>综合谈判（双赢）</th></tr>
+        <tr><td>目标</td><td>获得尽可能多的"蛋糕"</td><td>把蛋糕做大，双赢</td></tr>
+        <tr><td>动机</td><td>零和博弈</td><td>互利共赢</td></tr>
+        <tr><td>焦点</td><td>立场</td><td>利益</td></tr>
+        <tr><td>信息共享</td><td>低（信息是筹码）</td><td>高（信息帮助双方）</td></tr>
+        <tr><td>关系时间</td><td>短期</td><td>长期</td></tr>
+      </table>
+      <div class="key-point">
+        <strong>冲突过程5阶段：</strong>潜在对立→认知和人格化→行为意识→行为→结果
+      </div>
+    </div>
+  </div>
+
+  <!-- CH16 -->
+  <div class="theory-section-title">第十六章 组织文化 <span>★必考</span></div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title"><span class="icon">🏛️</span>组织文化7特征 + 传递方式</div>
+        <div class="card-subtitle">7特征必背·4传递方式必背</div>
+      </div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="two-col">
+        <div>
+          <div style="color:var(--gold);font-size:13px;font-weight:700;margin-bottom:8px">7项特征</div>
+          <ul class="numbered-list">
+            <li>创新与冒险</li>
+            <li>关注细节</li>
+            <li>结果导向</li>
+            <li>员工导向</li>
+            <li>团队导向</li>
+            <li>进取心</li>
+            <li>稳定性</li>
+          </ul>
+        </div>
+        <div>
+          <div style="color:var(--teal);font-size:13px;font-weight:700;margin-bottom:8px">4种传递方式</div>
+          <ul class="numbered-list">
+            <li>故事（借古喻今）</li>
+            <li>仪式（重复性活动）</li>
+            <li>物质象征（谁是重要人物）</li>
+            <li>语言（部门专属术语）</li>
+          </ul>
+        </div>
+      </div>
+      <div class="key-point">
+        <strong>组织文化定义：</strong>组织成员共享的一套能够将本组织与其他组织区分开来的意义体系。
+      </div>
+      <div class="memory-card">
+        <h4>🧠 7特征速记</h4>
+        <div class="memory-acronym">创关结员团进稳</div>
+        <p>创新冒险→关注细节→结果导向→员工导向→团队导向→进取心→稳定性</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CH18 -->
+  <div class="theory-section-title">第十八章 组织变革与压力管理 <span>★论述题</span></div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div>
+        <div class="card-title"><span class="icon">🔄</span>变革阻力 + 卢因三步骤模型</div>
+        <div class="card-subtitle">论述题常出·必须掌握</div>
+      </div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="two-col">
+        <div>
+          <div style="color:var(--red);font-size:13px;margin-bottom:8px"><strong>个体阻力</strong></div>
+          <ul class="numbered-list">
+            <li>习惯</li>
+            <li>安全感</li>
+            <li>经济因素</li>
+            <li>对未知的恐惧</li>
+            <li>选择性信息加工</li>
+          </ul>
+        </div>
+        <div>
+          <div style="color:var(--gold);font-size:13px;margin-bottom:8px"><strong>组织阻力</strong></div>
+          <ul class="numbered-list">
+            <li>结构惰性</li>
+            <li>有限的变革范围</li>
+            <li>群体惰性</li>
+            <li>对专业知识的威胁</li>
+            <li>对已有权力关系的威胁</li>
+          </ul>
+        </div>
+      </div>
+      <div class="key-point">
+        <strong>卢因三步骤模型：</strong><br>
+        ① <span class="red">解冻现状</span>——打破现有平衡，创造变革动力<br>
+        ② <span class="highlight">移动到新状态</span>——实施变革<br>
+        ③ <span class="teal">重新冻结</span>——巩固新状态使其持久
+      </div>
+      <div class="key-point">
+        <strong>科特八步骤：</strong>紧迫感→联盟→愿景→宣传→扫障碍→短期胜利→巩固→强化
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== MUST KNOW ======== -->
+<div id="must" class="section">
+  <div style="font-family:'Noto Serif SC',serif;font-size:22px;color:var(--red);margin-bottom:16px">🔥 必考重点清单</div>
+
+  <div class="alert alert-red">这里是考前最后30分钟必须看的内容——出题频率最高的核心知识点。</div>
+
+  <div class="theory-section-title">一、必背定义（名词解释常考）</div>
+  <div class="must-grid">
+    <div class="must-item">
+      <h4>组织行为学</h4>
+      <p>探讨个体、群体以及<strong>结构</strong>对组织内部行为的影响，目的是应用这些知识<strong>改善组织绩效</strong></p>
+    </div>
+    <div class="must-item">
+      <h4>认知失调</h4>
+      <p>个体可察觉到的两个或更多态度之间，或者行为和态度之间的<strong>任何不一致</strong></p>
+    </div>
+    <div class="must-item">
+      <h4>社会惰化</h4>
+      <p>个体在群体中工作<strong>不如</strong>单独工作努力的倾向（随群体规模增大，个人努力降低）</p>
+    </div>
+    <div class="must-item">
+      <h4>群体思维</h4>
+      <p>群体中从众压力使该群体难以批判性评估那些不寻常、少数派提出的观点</p>
+    </div>
+    <div class="must-item">
+      <h4>变革型领导</h4>
+      <p>鼓舞下属将个人利益升华为组织利益，不仅传递自己价值观，还<strong>培养下属质疑领导者本人价值观</strong>的能力</p>
+    </div>
+    <div class="must-item">
+      <h4>情绪劳动</h4>
+      <p>在人际交往过程中个体表现出<strong>令组织满意的情绪</strong>（如空姐热情，医生中性）</p>
+    </div>
+    <div class="must-item">
+      <h4>工作特征模型</h4>
+      <p>五维度：技能多样性·任务完整性·任务重要性·工作自主性·<strong>反馈</strong></p>
+    </div>
+    <div class="must-item">
+      <h4>晕轮效应</h4>
+      <p>根据个体某一种特征从而形成<strong>总体印象</strong>（以点概面）</p>
+    </div>
+  </div>
+
+  <div class="theory-section-title">二、必考对比（简答/论述必出）</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div><div class="card-title">📊 激励理论大对比（必考）</div></div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <table class="compare-table">
+        <tr><th>理论</th><th>提出者</th><th>类型</th><th>核心观点</th><th>实证支持</th></tr>
+        <tr><td>需求层次</td><td>马斯洛</td><td>内容型</td><td>5层次需求，从低到高</td><td>❌ 几乎无</td></tr>
+        <tr><td>X/Y理论</td><td>麦格雷戈</td><td>人性假设</td><td>X消极/Y积极</td><td>❌ 无</td></tr>
+        <tr><td>双因素理论</td><td>赫兹伯格</td><td>内容型</td><td>激励/保健因素分离</td><td>⚠️ 弱</td></tr>
+        <tr><td>成就需求理论</td><td>麦克莱兰</td><td>内容型</td><td>成就/权力/情谊需求</td><td>✅ 最强</td></tr>
+        <tr><td>期望理论</td><td>弗鲁姆</td><td>过程型</td><td>M=V×E</td><td>✅ 较强</td></tr>
+        <tr><td>公平理论</td><td>亚当斯</td><td>过程型</td><td>投入/产出对比</td><td>✅ 较强</td></tr>
+        <tr><td>目标设置理论</td><td>洛克</td><td>过程型</td><td>具体难度目标促进绩效</td><td>✅ 强</td></tr>
+      </table>
+      <div class="alert alert-gold">⚠️ 考试常考："麦克莱兰的成就需求理论获得了最有力的研究支持"</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div><div class="card-title">📊 分配谈判 vs 综合谈判（必考）</div></div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <table class="compare-table">
+        <tr><th>维度</th><th>分配谈判</th><th>综合谈判</th></tr>
+        <tr><td>目标</td><td>获得最多</td><td>扩大总量</td></tr>
+        <tr><td>动机</td><td>零和（你赢我输）</td><td>双赢</td></tr>
+        <tr><td>焦点</td><td>立场</td><td>利益</td></tr>
+        <tr><td>利益</td><td>针锋相对</td><td>存在共同利益</td></tr>
+        <tr><td>信息共享</td><td>低</td><td>高</td></tr>
+        <tr><td>关系时长</td><td>短期</td><td>长期</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="theory-section-title">三、数字/列表必背</div>
+  <div class="tip-grid">
+    <div class="tip-card">
+      <h4>📝 沟通过程8要素</h4>
+      <ul>
+        <li>发送者</li><li>编码</li><li>信息</li><li>渠道</li>
+        <li>解码</li><li>接受者</li><li>噪音</li><li>反馈</li>
+      </ul>
+    </div>
+    <div class="tip-card">
+      <h4>🏗️ 组织结构6要素</h4>
+      <ul>
+        <li>工作专门化</li><li>部门化</li><li>指挥链</li>
+        <li>控制跨度</li><li>集权与分权</li><li>正规化</li>
+      </ul>
+    </div>
+    <div class="tip-card">
+      <h4>🔄 变革阻力（个体）</h4>
+      <ul>
+        <li>习惯</li><li>安全感</li><li>经济因素</li>
+        <li>对未知的恐惧</li><li>选择性信息加工</li>
+      </ul>
+    </div>
+    <div class="tip-card">
+      <h4>🎭 有效团队3大类因素</h4>
+      <ul>
+        <li>资源/外界条件（充足资源·领导结构·信任·评估奖励）</li>
+        <li>团队构成（能力·个性·角色·多元化·规模）</li>
+        <li>过程变量（共同目的·具体目标·效能·冲突·惰化）</li>
+      </ul>
+    </div>
+    <div class="tip-card">
+      <h4>🌟 大五人格OCEAN</h4>
+      <ul>
+        <li>O — 经验开放性</li><li>C — 责任心（最预测绩效）</li>
+        <li>E — 外倾性</li><li>A — 随和性</li><li>N — 情绪稳定性</li>
+      </ul>
+    </div>
+    <div class="tip-card">
+      <h4>🏛️ 组织文化7特征</h4>
+      <ul>
+        <li>创新与冒险</li><li>关注细节</li><li>结果导向</li>
+        <li>员工导向</li><li>团队导向</li><li>进取心</li><li>稳定性</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="theory-section-title">四、最易混淆陷阱</div>
+  <div class="alert alert-red">
+    ❗ <strong>易错点1：</strong>双因素理论——激励因素的对立面是"没有满意"，<strong>不是</strong>"不满意"！<br><br>
+    ❗ <strong>易错点2：</strong>麦克莱兰成就需求理论研究支持最强，但<strong>对管理实践的影响却不如其他理论</strong>。<br><br>
+    ❗ <strong>易错点3：</strong>变革型领导≠魅力型领导。魅力型仅让下属接受自己世界观；变革型还培养下属<strong>质疑领导者</strong>的能力。<br><br>
+    ❗ <strong>易错点4：</strong>态度不一定决定行为；<strong>行为也可以决定态度</strong>（认知失调理论）。<br><br>
+    ❗ <strong>易错点5：</strong>社会惰化有西方文化偏见，在<strong>个人主义文化</strong>（美国、加拿大）中更明显。
+  </div>
+</div>
+
+<!-- ======== FLASHCARDS ======== -->
+<div id="flashcard" class="section">
+  <div style="font-family:'Noto Serif SC',serif;font-size:22px;color:var(--gold);margin-bottom:8px">🃏 记忆卡片</div>
+  <p style="font-size:13px;color:var(--gray);margin-bottom:20px">点击卡片翻转查看答案 · 用箭头切换卡片</p>
+
+  <div class="flashcard-container" id="flashcardEl" onclick="flipCard()">
+    <div class="flashcard-inner">
+      <div class="flashcard-front">
+        <div class="question" id="fcQuestion">loading...</div>
+        <div class="hint">👆 点击翻转查看答案</div>
+      </div>
+      <div class="flashcard-back">
+        <div class="keyword" id="fcKeyword"></div>
+        <div class="answer" id="fcAnswer"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fc-nav">
+    <button class="btn btn-secondary" onclick="prevCard()">← 上一张</button>
+    <span class="fc-counter" id="fcCounter">1 / 30</span>
+    <button class="btn btn-teal" onclick="nextCard()">下一张 →</button>
+  </div>
+
+  <div style="display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap">
+    <button class="btn btn-secondary" onclick="shuffleCards()">🔀 随机打乱</button>
+    <button class="btn btn-secondary" onclick="resetCards()">↺ 从头开始</button>
+  </div>
+</div>
+
+<!-- ======== QUIZ ======== -->
+<div id="quiz" class="section">
+  <div style="font-family:'Noto Serif SC',serif;font-size:22px;color:var(--gold);margin-bottom:16px">✏️ 模拟测试题库</div>
+
+  <div class="quiz-stats">
+    <div class="stat-box total"><div class="num" id="statTotal">0</div><div class="label">已答题数</div></div>
+    <div class="stat-box correct"><div class="num" id="statCorrect">0</div><div class="label">正确</div></div>
+    <div class="stat-box wrong"><div class="num" id="statWrong">0</div><div class="label">错误</div></div>
+    <div class="stat-box score"><div class="num" id="statScore">-</div><div class="label">正确率</div></div>
+  </div>
+
+  <div class="quiz-controls">
+    <button class="btn btn-primary" onclick="resetQuiz()">🔄 重置所有</button>
+    <button class="btn btn-secondary" onclick="showWrongOnly()">❌ 只看错题</button>
+    <button class="btn btn-secondary" onclick="showAll()">📋 显示全部</button>
+  </div>
+
+  <div id="quizContainer"></div>
+</div>
+
+<!-- ======== TIPS ======== -->
+<div id="tips" class="section">
+  <div style="font-family:'Noto Serif SC',serif;font-size:22px;color:var(--gold);margin-bottom:16px">💡 答题攻略 & 时间规划</div>
+
+  <div class="theory-section-title">10小时备考时间表</div>
+  <div class="timeline">
+    <div class="timeline-item">
+      <h4>第1-2小时：章节总览（本页面）</h4>
+      <p>快速浏览18章重要性评级，确定重点章节（CH7激励、CH12领导、CH16文化、CH3态度、CH6决策）</p>
+    </div>
+    <div class="timeline-item">
+      <h4>第3-5小时：核心理论精读</h4>
+      <p>逐一打开"核心理论"中的折叠卡片，重点掌握对比表格和公式，做好笔记</p>
+    </div>
+    <div class="timeline-item">
+      <h4>第6小时：必考重点强化</h4>
+      <p>完整阅读"必考重点"页面，重点记住易错点清单和数字列表</p>
+    </div>
+    <div class="timeline-item">
+      <h4>第7-8小时：记忆卡片训练</h4>
+      <p>用记忆卡片循环测试，答不出来的卡片重点标记，反复练习</p>
+    </div>
+    <div class="timeline-item">
+      <h4>第9小时：模拟测试60题</h4>
+      <p>完整做一遍测试题，认真阅读每道题的解析，错题重点复习</p>
+    </div>
+    <div class="timeline-item">
+      <h4>第10小时：查漏补缺</h4>
+      <p>重看错题解析，再过一遍"必考重点"页面，尤其是易错点5条</p>
+    </div>
+  </div>
+
+  <div class="theory-section-title">答题技巧</div>
+  <div class="tip-grid">
+    <div class="tip-card">
+      <h4>📝 名词解释（5-8分）</h4>
+      <ul>
+        <li>先写出核心定义（一句话）</li>
+        <li>再补充关键要素/特征</li>
+        <li>最后举一个具体例子</li>
+        <li>字数控制在80-150字</li>
+      </ul>
+    </div>
+    <div class="tip-card">
+      <h4>📝 简答题（10-15分）</h4>
+      <ul>
+        <li>用数字列表作答（显得有条理）</li>
+        <li>每点先写小标题再展开</li>
+        <li>不少于4个要点</li>
+        <li>结合书本理论，不要只讲常识</li>
+      </ul>
+    </div>
+    <div class="tip-card">
+      <h4>📝 论述题（20-30分）</h4>
+      <ul>
+        <li>开头：界定核心概念</li>
+        <li>中间：分点论述（编号）</li>
+        <li>引用具体理论和代表人物</li>
+        <li>结尾：联系实际/管理启示</li>
+        <li>字数不少于500字</li>
+      </ul>
+    </div>
+    <div class="tip-card">
+      <h4>🎯 得分策略</h4>
+      <ul>
+        <li>先答有把握的题目</li>
+        <li>激励理论对比是送分题</li>
+        <li>"举例说明"必须有具体例子</li>
+        <li>管理启示结尾可提高分数</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="theory-section-title">高频出题模式总结</div>
+  <div class="alert alert-gold">
+    <strong>名词解释高频：</strong>组织行为学 · 认知失调 · 社会惰化 · 群体思维 · 情绪劳动 · 变革型领导 · 晕轮效应 · 期望理论
+  </div>
+  <div class="alert alert-teal">
+    <strong>简答题高频：</strong>大五人格各维度 · 双因素理论内容及局限 · 沟通过程8要素 · 组织结构6要素 · 变革阻力来源 · 分配vs综合谈判对比
+  </div>
+  <div class="alert alert-red">
+    <strong>论述题高频：</strong>如何激励员工（综合多个理论）· 领导理论比较 · 组织变革的阻力及克服措施 · 群体决策的优缺点 · 组织文化的功能
+  </div>
+</div>
+
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ===== NAV =====
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const idx = ['overview','theory','must','flashcard','quiz','tips'].indexOf(id);
+  document.querySelectorAll('.nav-btn')[idx].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  updateProgress(id);
+}
+
+const visited = new Set();
+function updateProgress(id) {
+  visited.add(id);
+  const pct = Math.round((visited.size / 6) * 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressText').textContent = visited.size + ' / 6 模块已完成';
+}
+
+// ===== CARDS =====
+function toggleCard(header) {
+  const card = header.parentElement;
+  card.classList.toggle('open');
+}
+
+function filterCards(query) {
+  const q = query.toLowerCase();
+  document.querySelectorAll('.card').forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.style.display = text.includes(q) ? 'block' : 'none';
+  });
+}
+
+// ===== FLASHCARDS =====
+const flashcards = [
+  { q: "组织行为学的定义是什么？", kw: "OB定义", a: "探讨个体、群体以及结构对组织内部行为的影响，目的是应用这些知识改善组织绩效。" },
+  { q: "管理者的三种角色分别是什么？", kw: "三种角色", a: "人际角色（代表/领导/联络）、信息角色（监督/传播/发言）、决策角色（企业家/冲突处理/资源分配/谈判）" },
+  { q: "态度的三个组成成分是？", kw: "态度三要素", a: "①认知成分（信念，基础）②情感成分（情绪，核心）③行为意向（行动倾向）" },
+  { q: "什么是认知失调？减少失调的方法有哪些？", kw: "认知失调", a: "两个或更多态度之间/行为与态度之间的任何不一致。减少方法：①改变认知元素②降低重要性③增加和谐元素" },
+  { q: "大五人格模型的五个维度是？哪个预测绩效最强？", kw: "大五人格OCEAN", a: "外倾性·随和性·责任心·情绪稳定性·经验开放性。责任心在预测工作绩效方面最有价值！" },
+  { q: "归因理论的三个要素是什么？", kw: "归因三要素", a: "①区别性（不同情境下是否不同行为）②一致性（他人相似情境是否相同反应）③一贯性（不同时间是否相同行为）" },
+  { q: "什么是基本归因误差？", kw: "基本归因误差", a: "在判断他人行为时，倾向于高估内部（个人）原因，低估外部（情境）原因。" },
+  { q: "马斯洛需求层次理论的5个层次是？", kw: "需求层次", a: "①生理→②安全→③社交（爱与归属）→④尊重→⑤自我实现。注意：实证支持较弱！" },
+  { q: "双因素理论中激励因素和保健因素各是什么？", kw: "双因素理论", a: "激励因素：成就·认可·工作本身·责任（有则满意，无则不满意）。保健因素：薪酬·政策·人际·工作条件（有则消除不满，无则不满）" },
+  { q: "期望理论的公式是什么？三种关系是？", kw: "期望理论", a: "M=V×E。三关系：①期望（努力→绩效）②工具性（绩效→奖励）③效价（奖励对我的价值）" },
+  { q: "社会惰化的定义和原因？", kw: "社会惰化", a: "定义：群体中个体不如单独工作努力。原因：①群体责任扩散②个人贡献不可识别。克服：使贡献可识别化" },
+  { q: "群体思维的定义和特征？", kw: "群体思维", a: "从众压力使群体难以批判性评估不寻常观点。特征：合理化假设·施压异见者·自我审查·无异议错觉" },
+  { q: "沟通过程的8个关键部分？", kw: "沟通8要素", a: "发送者→编码→信息→渠道→解码→接受者→噪音→反馈" },
+  { q: "什么是渠道丰富度？最高的是哪种？", kw: "渠道丰富度", a: "渠道在传递信息方面的能力。面对面交谈丰富度最高（信息量最大+私人接触）；书面媒体最低。" },
+  { q: "特质理论和行为理论的主要区别？", kw: "领导理论对比", a: "特质理论：领导力来自个人品质特征。行为理论：领导可通过培养而成（关怀维度+结构维度）。特质可预测领导者，但无法有效区分有效/无效领导者。" },
+  { q: "变革型领导和魅力型领导的区别？", kw: "变革vs魅力", a: "魅力型：只是让下属接受自己的世界观。变革型：更高级，还培养下属质疑领导者本人建立的价值观的能力。" },
+  { q: "分配谈判和综合谈判的核心区别？", kw: "两种谈判", a: "分配=零和（争蛋糕）·立场·短期·信息保密。综合=双赢（做大蛋糕）·利益·长期·信息共享。" },
+  { q: "组织结构的六个关键要素？", kw: "结构6要素", a: "①工作专门化②部门化③指挥链④控制跨度⑤集权与分权⑥正规化" },
+  { q: "机械结构和有机结构的主要区别？", kw: "机械vs有机", a: "机械：高专门化·高正规化·集权·自上而下沟通。有机：扁平·跨职能团队·低正规化·员工高参与决策。" },
+  { q: "组织文化的7项特征？", kw: "文化7特征", a: "创新与冒险·关注细节·结果导向·员工导向·团队导向·进取心·稳定性（速记：创关结员团进稳）" },
+  { q: "组织文化传递给员工的4种方式？", kw: "文化传递", a: "①故事（借古喻今）②仪式（重复性活动强化价值观）③物质象征（传递谁重要的信息）④语言（专属术语增强认同）" },
+  { q: "卢因变革三步骤模型？", kw: "卢因三步骤", a: "①解冻现状（打破现有平衡）②移动到新状态（实施变革）③重新冻结（巩固新状态使之持久）" },
+  { q: "变革的个体阻力有哪些？", kw: "变革阻力", a: "①习惯②安全感③经济因素④对未知的恐惧⑤选择性信息加工。组织阻力：结构惰性·有限变革范围·群体惰性" },
+  { q: "工作特征模型的5个维度？", kw: "工作特征模型", a: "①技能多样性②任务完整性③任务重要性④工作自主性⑤反馈。前3个→工作有意义；自主性→责任感；反馈→了解结果" },
+  { q: "冲突过程的5个阶段？", kw: "冲突过程", a: "①潜在对立或失调②认知和人格化③行为意识④行为⑤结果" },
+  { q: "影响工作满意度的因素有哪些？", kw: "满意度因素", a: "工作本身·薪酬·晋升机会·主管·同事·人格。结论：贫穷时薪酬更重要；富裕时工作本身更重要。" },
+  { q: "什么是情绪劳动？为什么重要？", kw: "情绪劳动", a: "在人际交往中表现出令组织满意的情绪。重要性：是工作绩效的关键成分，影响服务质量和员工身心健康。" },
+  { q: "有效团队的3大类因素？", kw: "有效团队", a: "①资源和外界条件（充分资源·领导结构·信任·奖励）②团队构成（能力·个性·角色·规模）③过程变量（目的·目标·效能·冲突·惰化）" },
+  { q: "霍夫斯泰德的五种文化维度？", kw: "文化维度", a: "权力距离·不确定性规避·个人主义vs集体主义·男性主义vs女性主义·长期取向vs短期取向" },
+  { q: "麦克莱兰成就需求理论的核心观点？", kw: "成就需求", a: "三种主要需求：成就需求·权力需求·合群需求。成就需求强的人：爱独立解决问题·适度冒险·需要明确反馈。该理论获得最有力研究支持。" },
+];
+
+let fcIndex = 0;
+let fcCards = [...flashcards];
+
+function renderCard() {
+  const card = fcCards[fcIndex];
+  document.getElementById('fcQuestion').textContent = card.q;
+  document.getElementById('fcKeyword').textContent = card.kw;
+  document.getElementById('fcAnswer').textContent = card.a;
+  document.getElementById('fcCounter').textContent = (fcIndex+1) + ' / ' + fcCards.length;
+  document.getElementById('flashcardEl').classList.remove('flipped');
+}
+
+function flipCard() { document.getElementById('flashcardEl').classList.toggle('flipped'); }
+function nextCard() { fcIndex = (fcIndex + 1) % fcCards.length; renderCard(); }
+function prevCard() { fcIndex = (fcIndex - 1 + fcCards.length) % fcCards.length; renderCard(); }
+function shuffleCards() { fcCards.sort(() => Math.random() - 0.5); fcIndex = 0; renderCard(); }
+function resetCards() { fcCards = [...flashcards]; fcIndex = 0; renderCard(); }
+
+renderCard();
+
+// ===== QUIZ =====
+const quizData = [
+  { q: "以下哪项关于组织行为学（OB）的描述最准确？", opts: ["OB是研究管理者如何制定战略计划的科学", "OB探讨个体、群体以及结构对组织内部行为的影响，目的是改善组织绩效", "OB主要研究组织外部环境对企业的影响", "OB是专门研究如何提高员工工资水平的学科"], ans: 1, explain: "组织行为学的标准定义是：探讨个体、群体以及结构对组织内部行为的影响，目的是应用这些知识改善组织绩效。" },
+  { q: "管理者的三种角色中，'决策角色'不包括以下哪项？", opts: ["企业家角色", "资源分配者角色", "联络者角色", "谈判者角色"], ans: 2, explain: "联络者角色属于人际角色，不是决策角色。决策角色包括：企业家、干扰对付者、资源分配者、谈判者。" },
+  { q: "根据认知失调理论，以下哪个因素会影响减少失调的愿望？", opts: ["个人的身高", "造成失调的要素的重要程度", "个人的工作年限", "组织规模大小"], ans: 1, explain: "减少失调的愿望由三个因素决定：①造成失调要素的重要程度②个体认为自己受要素控制的程度③个体在失调状态下的受益程度。" },
+  { q: "关于工作满意度和薪酬的关系，以下说法正确的是？", opts: ["薪酬始终比工作本身更重要", "对贫穷的人薪酬更重要，一旦到了富裕水平，工作本身更重要", "工作本身始终比薪酬更重要", "薪酬和工作本身对满意度的影响完全相同"], ans: 1, explain: "根据教材：对于贫穷的人或生活在贫穷国家的人来说，薪酬更重要。一旦到了富裕的生活水平，工作本身以及工作满意度更重要。" },
+  { q: "大五人格模型中，在预测工作绩效方面最有价值的维度是？", opts: ["外倾性", "随和性", "责任心", "经验开放性"], ans: 2, explain: "责任心在预测行为方面最有价值。高责任心个体有高组织性和自律性，在大多数组织的大多数工作中，责任心可以预示较高的绩效。" },
+  { q: "归因理论中的'区别性'是指？", opts: ["个体是否在任何时间都对同一情境有相同反应", "个体在不同情境下是否表现出不同行为", "每个人面对相似情境是否都有相同反应", "个体行为是否受到外部环境影响"], ans: 1, explain: "区别性指个体在不同情境下是否表现出不同行为。三要素：区别性（不同情境）·一致性（同一情境不同人）·一贯性（同一情境不同时间）。" },
+  { q: "什么是'基本归因误差'？", opts: ["把他人成功归为运气", "在判断他人行为时，高估内部原因、低估外部情境原因的倾向", "把自己失败归为他人原因", "过度相信自己的判断"], ans: 1, explain: "基本归因误差：在个人行为的归因上，人们倾向于低估情境（外因）的作用，高估个人（内因）的作用。" },
+  { q: "马斯洛需求层次理论的实证研究情况如何？", opts: ["获得了非常强的实证支持", "几乎没有证据证明需求结构像马斯洛提出的那样组织", "在亚洲国家获得了很好的验证", "只在美国文化中被证实有效"], ans: 1, explain: "马斯洛需求层次理论几乎没有证据证明需求结构是像其提出的维度那样组织起来的，缺乏实证支持。" },
+  { q: "根据赫兹伯格双因素理论，薪酬属于哪类因素？其存在会产生什么效果？", opts: ["激励因素；会产生满意感", "保健因素；只能消除不满意，不能激励", "激励因素；直接提高绩效", "保健因素；会降低员工工作积极性"], ans: 1, explain: "薪酬属于保健因素（外在因素）。保健因素存在时，只能消除不满意，但不能使人感到满意或产生激励作用。只有激励因素（工作本身、成就感等）才能真正激励员工。" },
+  { q: "期望理论中，'效价'（Valence）是指？", opts: ["努力与绩效之间的关系", "绩效与奖励之间的关系", "奖励对个人目标的满足程度（奖励的吸引力）", "个体完成工作的能力水平"], ans: 2, explain: "期望理论三概念：期望（努力→绩效）·工具性（绩效→奖励）·效价（奖励对个人的价值/吸引力）。公式：M=V×E。" },
+  { q: "以下关于社会惰化的说法，哪个是正确的？", opts: ["社会惰化在集体主义文化中更明显", "社会惰化随群体规模增大而增强", "社会惰化是指个人在群体中比独自工作更努力", "社会惰化只存在于西方国家"], ans: 1, explain: "社会惰化随群体规模增大，个人努力会降低。它似乎存在西方偏见，在个人主义文化（美国、加拿大）中更明显。" },
+  { q: "群体发展的五阶段模型正确顺序是？", opts: ["形成→执行→规范化→震荡→解体", "形成→震荡→规范化→执行→解体", "震荡→形成→规范化→执行→解体", "形成→规范化→震荡→执行→解体"], ans: 1, explain: "群体发展五阶段：①形成（不确定）②震荡（冲突）③规范化（凝聚力形成）④执行（充分发挥作用）⑤解体（准备解散）。" },
+  { q: "沟通过程中，'噪音'是指？", opts: ["实际声音干扰", "沟通过程中任何可能造成信息失真的因素", "接收者对信息的错误理解", "发送者的编码错误"], ans: 1, explain: "沟通中的噪音是广义概念，指任何可能干扰信息准确传递、造成失真的因素（包括物理噪音、语义障碍、心理因素等）。" },
+  { q: "从'渠道丰富度'的角度看，哪种沟通渠道得分最高？", opts: ["电子邮件", "书面报告", "面对面交谈", "电话通话"], ans: 2, explain: "面对面交谈渠道丰富度最高，因为它能传递最大量的信息以及有'就在面前'的私人接触。非正式的肢体语言、面部表情都可传递。" },
+  { q: "关于特质理论，以下说法正确的是？", opts: ["特质理论能有效区分有效和无效的领导者", "特质可以预测领导者和领导能力，但不能真正有效地区分有效和无效领导者", "特质理论完全否认环境对领导的影响", "特质理论认为领导力主要来自后天培养"], ans: 1, explain: "特质理论的局限：特质可以预测领导者和领导能力，而不是真正有效地区分有效和无效的领导者。这是特质理论的根本缺陷。" },
+  { q: "变革型领导和魅力型领导的主要区别是？", opts: ["变革型领导只关注短期目标", "变革型领导不仅传递价值观，还培养下属质疑领导者本人价值观的能力", "魅力型领导比变革型领导更有效", "两者完全相同，只是名称不同"], ans: 1, explain: "魅力型领导可能只是想让下属采纳自己的世界观；变革型领导不仅努力培养下属质疑已有观念的能力，还培养下属质疑那些由领导者本人建立的价值观的能力。" },
+  { q: "综合谈判（Integrative Bargaining）的核心特征是？", opts: ["零和博弈，以获得最多为目标", "双赢导向，通过扩大资源满足双方", "强调立场而非利益", "适合一次性短期关系"], ans: 1, explain: "综合谈判以双赢为目标，通过信息共享找到满足双方利益的方案，强调利益而非立场，适合长期关系。" },
+  { q: "组织结构六要素不包括以下哪项？", opts: ["工作专门化", "部门化", "控制跨度", "绩效考核"], ans: 3, explain: "组织结构六要素：工作专门化·部门化·指挥链·控制跨度·集权与分权·正规化。绩效考核不是结构要素。" },
+  { q: "有机结构的主要特征是？", opts: ["高度正规化，信息自上而下流动，员工几乎不参与决策", "结构扁平，跨职能团队，低正规化，员工高度参与决策", "高度集权，广泛部门化，严格指挥链", "固定程序和规则，不允许灵活变动"], ans: 1, explain: "有机结构：扁平化、跨等级跨职能团队、低正规化、全面信息网络（含水平和自下而上沟通）、员工高度参与决策。适合创新战略。" },
+  { q: "组织文化的7项特征不包括？", opts: ["创新与冒险", "关注细节", "利润最大化", "进取心"], ans: 2, explain: "7项特征：创新与冒险·关注细节·结果导向·员工导向·团队导向·进取心·稳定性。利润最大化不是文化特征，而是经营目标。" },
+  { q: "卢因变革三步骤模型的正确顺序是？", opts: ["移动→解冻→重新冻结", "解冻→移动→重新冻结", "重新冻结→解冻→移动", "解冻→重新冻结→移动"], ans: 1, explain: "卢因三步骤：①解冻现状（打破现有平衡，创造变革动力）②移动到新状态（实施变革）③重新冻结（巩固新变革使之持久）。" },
+  { q: "以下哪项是变革的组织阻力，而非个体阻力？", opts: ["习惯", "安全感", "结构惰性", "经济因素"], ans: 2, explain: "结构惰性是组织阻力（组织拥有产生稳定性的内在机制）。习惯·安全感·经济因素·对未知恐惧·选择性信息加工是个体阻力。" },
+  { q: "以下关于群体思维的说法，哪个是错误的？", opts: ["群体思维会损害群体绩效", "群体思维使群体难以批判性评估不同观点", "高度凝聚力的群体更容易产生群体思维", "群体思维会使成员提出更多创新方案"], ans: 3, explain: "群体思维使成员难以提出异见，反而会抑制创新方案的提出。群体思维是'伤害群体的疾病'，会严重损害群体绩效。" },
+  { q: "期望理论在管理实践中的应用，以下哪项是正确的？", opts: ["给所有员工相同奖励", "建立绩效与报酬挂钩的制度，提高员工工作热情", "减少员工与目标的互动", "降低对员工的期望以减少压力"], ans: 1, explain: "期望理论的应用：①根据员工需要设置奖励②通过培训提高员工信心③制定报酬与个人绩效挂钩的制度。" },
+  { q: "麦克莱兰成就需求理论的主要内容是？", opts: ["人有五层次需求，必须逐级满足", "人有成就、权力、情谊三种需求，成就需求者对组织最重要", "人的行为完全由外部环境决定", "所有人的主要需求是安全感"], ans: 1, explain: "麦克莱兰理论：三种主要需求——成就需求·权力需求·合群需求。成就需求强的人有高内在激励，对企业最重要。该理论获得最有力研究支持，但对管理实践影响不如其他理论。" },
+  { q: "以下关于工作特征模型的描述，哪项正确？", opts: ["只有薪酬可以激励员工", "五维度（技能多样性等）可以预测工作满意度和绩效", "工作特征与员工满意度无关", "所有员工对工作丰富化都有积极反应"], ans: 1, explain: "工作特征模型五维度：技能多样性·任务完整性·任务重要性·工作自主性·反馈。前3个→工作有意义·自主性→责任感·反馈→了解结果，导致更高更满意的绩效。" },
+  { q: "西方文化和东方文化的员工工作满意度比较？", opts: ["东方文化员工工作满意度更高", "西方文化员工工作满意度更高", "两者完全相同", "无法比较"], ans: 1, explain: "西方文化中的员工与东方文化中的员工相比工作满意度更高。西方文化强调正面情绪和个人快乐；东方文化对负面情绪的厌恶感更少。" },
+  { q: "情绪劳动（Emotional Labor）是指？", opts: ["体力劳动中产生的情绪", "在人际交往中表现出令组织满意的情绪", "员工对工作不满时的情绪表达", "领导者控制员工情绪的行为"], ans: 1, explain: "情绪劳动是工作绩效的关键成分，指在人际交往中个体表现出令组织满意的情绪（如空姐热情、丧葬顾问悲伤、医生中性）。" },
+  { q: "有效团队的'过程变量'不包括哪项？", opts: ["共同目的", "具体目标", "团队效能", "充分的资源"], ans: 3, explain: "过程变量包括：共同目的·具体目标·团队效能·冲突水平·社会惰化。充分的资源属于'资源和外界条件'类别，不是过程变量。" },
+  { q: "霍夫斯泰德五维文化中，影响领导方式最直接的维度是？", opts: ["不确定性规避", "个人主义vs集体主义和权力距离", "男性主义", "长期取向"], ans: 1, explain: "对领导方式影响最直接的是：'个人主义与集体主义'和'权力距离'。权力距离影响下属对权威的接受程度，个人/集体主义影响激励方式。" },
+  { q: "关于分配谈判中信息共享的说法，哪个正确？", opts: ["双方应尽量多共享信息以达到更好结果", "信息共享程度低，因为信息会让另一方占优势", "信息共享有助于发现共同利益", "信息共享对分配谈判没有影响"], ans: 1, explain: "分配谈判中信息共享程度低——信息共享会让另一方占优势（因为是零和博弈）。综合谈判中信息共享程度高，因为可帮助找到满足双方利益的方案。" },
+  // 额外题目
+  { q: "OB模型的三种分析水平从小到大的正确顺序是？", opts: ["组织系统→群体→个体", "个体→群体→组织系统", "群体→个体→组织系统", "三个层次没有顺序之分"], ans: 1, explain: "三个分析水平如同建筑上的砖块，个体水平建立在基础，群体水平建立在个体之上，组织系统水平建立在群体之上。" },
+  { q: "关于态度中'调节变量'对态度行为关系的影响，正确的是？", opts: ["社会压力非常强大时，态度和行为差异更小", "态度的重要性越高，态度与行为的相关性越低", "社会压力非常强大时，态度和行为之间更可能出现差异", "具体态度不如一般态度更能预测具体行为"], ans: 2, explain: "当社会压力在某种程度上非常强大时，态度与行为之间更可能出现差异（因为人们迫于社会压力做出与内心态度不一致的行为）。" },
+  { q: "以下关于情绪和心境区别的说法，哪个正确？", opts: ["心境比情绪更强烈", "情绪有明确的指向对象，心境较弱且常缺乏背景刺激", "两者完全相同", "心境有明确的指向对象，情绪则没有"], ans: 1, explain: "情绪是强烈的情感，直接指向某个人或某个物（有明确对象）。心境是比情绪更弱、经常缺乏背景刺激的情感（无明确对象）。" },
+  { q: "X理论和Y理论的主要区别在于？", opts: ["X理论适用于大企业，Y理论适用于小企业", "X理论认为人厌恶工作需要控制，Y理论认为工作是人的本能", "X理论是过程型激励理论，Y理论是内容型", "X理论认为奖励更重要，Y理论认为惩罚更重要"], ans: 1, explain: "X理论：人天生懒惰，需要严格控制和惩罚；Y理论：工作是人的本能，人愿意自我管理实现个人与组织目标统一。两种理论均缺乏实证支持。" },
+  { q: "群体的正式规范主要发挥哪些功能？", opts: ["标准·导向·评价·动力", "经济·安全·社交·尊重", "计划·组织·领导·控制", "认知·情感·行为·反馈"], ans: 0, explain: "群体规范的功能：①标准功能（确定行动标准）②导向功能（完成群体目标）③评价功能（评价成员行为效果）④动力功能（督导行为）。" },
+  { q: "关于组织文化的定义，以下哪个最准确？", opts: ["组织的规章制度体系", "组织成员共享的一套能将本组织与其他组织区分开来的意义体系", "企业的盈利模式和战略方向", "组织的正式沟通渠道"], ans: 1, explain: "组织文化定义：组织成员共享的一套能够将本组织与其他组织区分开来的意义体系（包括价值观·信念·行为规范等）。" },
+  { q: "以下哪项属于激励因素（而非保健因素）？", opts: ["薪酬", "工作条件", "公司政策", "工作本身的成就感"], ans: 3, explain: "激励因素（与工作内容相关）：成就感·认可·工作本身·责任·成长。保健因素（与工作环境相关）：薪酬·工作条件·公司政策·人际关系·监督。" },
+  { q: "关于谈判中性别的影响，以下哪个说法正确？", opts: ["女性谈判者比男性表现更强势", "当女性发起谈判时，往往处于不利地位", "男性在所有类型谈判中表现都更好", "性别对谈判结果没有影响"], ans: 1, explain: "研究表明，当女性发起谈判时，她们会处于不利地位——因为人们形成了女性是'友善的'、男性是'强硬的'刻板印象，而女性无论表现得友善或强硬都是不利的。" },
+  { q: "有机结构最适合企业的哪种战略？", opts: ["成本最小化战略", "模仿战略", "创新战略", "防御战略"], ans: 2, explain: "创新战略（意义性和独特性创新）需要有机结构：结构松散·工作专门化程度低·正规化程度低·分权化。机械结构最适合成本最小化战略。" },
+  { q: "科特变革八步骤模型的第一步是？", opts: ["创建愿景指导变革", "扫除变革的障碍", "通过提出迫切变革的有力理由建立紧迫感", "巩固成果重新评估变革"], ans: 2, explain: "科特八步骤：①建立紧迫感②形成联盟③创建愿景④宣传愿景⑤扫除障碍⑥规划短期胜利⑦巩固成果⑧通过新行为与成功关系强化变革。" },
+  { q: "沟通过程中，'编码'是指？", opts: ["接受者对信息的理解", "发送者将信息转化为可传递的符号/形式", "信息传递的物理媒介", "去除信息中的噪音"], ans: 1, explain: "编码是发送者将要传递的内容转化为可传递的符号、文字、图像等形式的过程。解码是接受者将接收到的符号还原为信息的过程。" },
+  { q: "关于群体决策与个体决策的比较，下列说法正确的是？", opts: ["群体决策在速度方面优于个体决策", "群体决策在准确性上更好，但速度上不如个体决策", "个体决策在所有方面都优于群体决策", "群体决策和个体决策没有明显差异"], ans: 1, explain: "就准确性而言，群体决策更准确；但就速度而言，个体决策优势更大。群体决策比个体更有创造性和可接受性，但浪费时间，且存在从众压力等缺点。" },
+  { q: "以下哪项能有效克服社会惰化？", opts: ["增加群体规模", "使群体中每个个体的贡献可识别化", "减少反馈频率", "降低工作任务难度"], ans: 1, explain: "克服社会惰化的关键是使个人贡献可识别化，防止责任扩散。同时：在考核制度中评价个人表现·使工作任务更重要有意义。" },
+  { q: "以下哪个理论最能解释一个人因为害怕被群体排斥而改变了自己的意见？", opts: ["归因理论", "认知失调理论", "从众现象（社会从众压力）", "晕轮效应"], ans: 2, explain: "从众行为：在群体压力的作用下，个体会产生与群体行为保持一致的倾向。害怕被排斥是从众的典型原因之一（安全需要，避免偏离焦虑）。" },
+  { q: "OB中'因变量'不包括？", opts: ["生产率", "工作满意度", "管理者学历", "缺勤率"], ans: 2, explain: "OB的因变量：生产率·缺勤率·流动率·工作场所中的偏常行为·组织公民行为·工作满意度。管理者学历是个体特征变量，不是组织行为的因变量。" },
+  { q: "关于变革型领导的全球普适性，以下哪个说法正确？", opts: ["变革型领导只适用于西方文化", "愿景在任何文化中都是重要的，但形成和传达方式会随文化不同而改变", "变革型领导在不同文化中效果完全相同", "变革型领导不适合集体主义文化"], ans: 1, explain: "变革型领导的全球普适因素：愿景·远见·提供鼓励·值得信任·充满活力·积极性·主动性。在任何文化中愿景都重要，但传达方式会因文化差异而改变。" },
+  { q: "灵性文化（Spiritual Culture）的特点不包括？", opts: ["强烈的目的感", "信任与尊重", "人性化的工作实践", "严格的等级控制体系"], ans: 3, explain: "灵性文化特点：①强烈的目的感②信任与尊重（互信、诚实、开放）③人性化的工作实践（弹性工时、员工授权等）④对员工情绪和意见的容忍。严格等级控制与灵性文化相悖。" },
+  { q: "以下哪种情况最可能降低工作满意度？", opts: ["工作具有挑战性和意义", "清晰的绩效反馈", "完全缺乏自主性和控制感", "良好的同事关系"], ans: 2, explain: "根据工作特征模型，工作自主性直接影响员工的责任感和满意度。完全缺乏自主性会严重降低工作满意度。工作的挑战性、反馈、同事关系都是正面因素。" },
+  { q: "以下关于双因素理论局限性的说法，哪个是错误的？", opts: ["样本缺乏代表性", "满意不等于劳动生产率提高", "保健因素会产生强烈的激励作用", "该理论没有获得其他文献的有力支持"], ans: 2, explain: "保健因素不会产生强烈的激励作用。保健因素存在只能消除不满意，无法使人满意或激励。这是双因素理论的核心主张，不是局限。真正的局限是：样本问题·研究方法偏差·满意≠生产率提高等。" },
+  { q: "以下关于非正式沟通（葡萄藤）的特点，哪个说法是错误的？", opts: ["它不受管理层控制", "大多数员工认为它比官方渠道更可信", "它传递的信息通常高度准确", "它在很大程度上有利于人们的自身利益"], ans: 2, explain: "非正式沟通（小道消息）的特点：①不受管理层控制②员工认为比官方渠道更可信更可靠③有利于自身利益。但小道消息并不一定高度准确，管理者应减少其消极影响。" },
+  { q: "公平理论的核心观点是？", opts: ["绝对薪酬水平决定工作积极性", "员工工作态度和积极性受投入/产出比的相对值影响", "只要满足最高需求就能激励员工", "员工只在意奖励的数量而非公平性"], ans: 1, explain: "公平理论（亚当斯）：员工的工作态度和积极性不因所得报酬的绝对值，而是受其所得相对值（与他人的比较）影响。感知不公平会导致减少努力等行为。" },
+  { q: "以下哪种领导行为最符合'变革型领导'的描述？", opts: ["通过严格奖惩体系管理员工", "鼓舞下属将个人利益升华为组织利益，对下属产生深远影响", "严格按照规章制度处理所有事务", "主要关注维持现有绩效水平"], ans: 1, explain: "变革型领导：鼓舞下属将个人利益升华为组织利益，并对下属产生超乎寻常的深远影响。与此对应的是交易型领导（通过奖惩体系管理）。" },
+  { q: "以下关于组织文化传递的说法，哪个是正确的？", opts: ["组织文化主要通过正式培训传递", "文化通过故事、仪式、物质象征和语言传递给员工", "高层管理者的行为对文化传递没有影响", "文化只能通过书面规则传递"], ans: 1, explain: "组织文化传递的4种方式：①故事（借古喻今，为现有实践提供解释）②仪式（强化核心价值观的重复性活动）③物质象征（传递谁是重要人物等信息）④语言（专属术语帮助认同文化）。" },
+  { q: "创新型组织最应采用哪种结构？", opts: ["机械式结构，高度集权和正规化", "有机式结构，分权、低正规化、灵活", "混合结构，现有活动严控，创新活动松散", "矩阵结构，双重领导"], ans: 1, explain: "创新战略需要有机结构：结构松散·工作专门化程度低·正规化低·分权化。机械结构适合成本最小化战略；混合（有机+机械）适合模仿战略。" },
+  { q: "以下关于从众行为的说法，哪个是错误的？", opts: ["从众可以帮助维护群体秩序", "从众会束缚成员创造力的发挥", "高智力个体不会从众", "从众是在群体压力下与多数人保持一致的行为"], ans: 2, explain: "从众行为受多种因素影响，高智力个体也可能从众（取决于自信心、情境特征等）。智力只是影响因素之一，并不能完全决定是否从众。" },
+  { q: "在组织行为学的分析框架中，'工作场所中的偏常行为'属于哪类变量？", opts: ["自变量（个体水平）", "因变量", "调节变量", "中介变量"], ans: 1, explain: "OB的因变量包括：生产率·缺勤率·流动率·工作场所中的偏常行为·组织公民行为·工作满意度。这些都是组织期望解释和预测的结果变量。" },
+];
+
+let quizState = {};
+let showWrong = false;
+
+function buildQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  quizData.forEach((q, i) => {
+    if (showWrong && quizState[i] !== 'wrong') return;
+    const card = document.createElement('div');
+    card.className = 'quiz-card' + (quizState[i] ? ' answered-' + quizState[i] : '');
+    card.id = 'qcard-' + i;
+
+    const optionsHtml = q.opts.map((opt, j) => {
+      let cls = '';
+      if (quizState[i]) {
+        if (j === q.ans) cls = 'correct';
+        else if (quizState[i] === 'wrong' && j === parseInt(quizState[i + '-chosen'])) cls = 'wrong';
+      }
+      return `<button class="option-btn ${cls}" onclick="answerQuiz(${i}, ${j})" ${quizState[i] ? 'disabled' : ''} data-idx="${j}">${String.fromCharCode(65+j)}. ${opt}</button>`;
+    }).join('');
+
+    const explainStyle = quizState[i] ? 'show' : '';
+    card.innerHTML = `
+      <div class="quiz-q"><span class="q-num">Q${i+1}</span>${q.q}</div>
+      <div class="options">${optionsHtml}</div>
+      <div class="explain-box ${explainStyle}"><strong>解析：</strong>${q.explain}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function answerQuiz(qi, chosen) {
+  if (quizState[qi]) return;
+  const correct = chosen === quizData[qi].ans;
+  quizState[qi] = correct ? 'correct' : 'wrong';
+  quizState[qi + '-chosen'] = chosen;
+  updateStats();
+  buildQuiz();
+  // Scroll to card
+  setTimeout(() => {
+    const el = document.getElementById('qcard-' + qi);
+    if (el) el.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }, 100);
+}
+
+function updateStats() {
+  const answered = Object.keys(quizState).filter(k => !k.includes('-')).length;
+  const correct = Object.values(quizState).filter(v => v === 'correct').length;
+  const wrong = answered - correct;
+  document.getElementById('statTotal').textContent = answered;
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statWrong').textContent = wrong;
+  document.getElementById('statScore').textContent = answered ? Math.round(correct/answered*100) + '%' : '-';
+}
+
+function resetQuiz() {
+  quizState = {};
+  showWrong = false;
+  updateStats();
+  buildQuiz();
+}
+
+function showWrongOnly() {
+  showWrong = true;
+  buildQuiz();
+}
+
+function showAll() {
+  showWrong = false;
+  buildQuiz();
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
